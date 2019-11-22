@@ -1,10 +1,10 @@
 
 /**
- * Author: Robert Hable
+ * Author: Mason Waters
  * Date: 11/16/2019
  * Compare Three Trees Assignment
  * This is the SplayTree Class
- * In collaboration with: Blake Furlano and Mason Waters
+ * In collaboration with: Blake Furlano and Robert Hable
  */
 public class SplayTree<E extends Comparable<E>> {
     private SplayBSTNode<E> root;
