@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 /**
@@ -28,7 +30,6 @@ public class Trees {
             System.out.println("The number of comparisons needed to find the entry in AVL: ");
             System.out.println("The number of comparisons needed to find the entry in Splay: ");
             System.out.println("The zip codes that belong to " + response + " are: ");
-
             System.out.print("Do you want me to search again? ");
             String response2 = console.nextLine();
             if(response2.equalsIgnoreCase("yes")){
@@ -40,7 +41,10 @@ public class Trees {
         }
     }
 
-    public static void passToPlace(Scanner data){
+    public static void passToPlace(Scanner data) throws FileNotFoundException{
+        FileOutputStream fout = new FileOutputStream("temporary.txt");            //temp delete later
+        PrintStream out = new PrintStream(fout);                                        //temp delete later
+
         String firstLine = data.nextLine();
         if(firstLine != null){
             //do nothing with the first line
@@ -53,7 +57,7 @@ public class Trees {
             SplayTree<Place> s = new SplayTree<Place>();
             BinarySearchTree<Place> b = new BinarySearchTree<Place>();
             AVLTree<Place> a = new AVLTree<Place>();
-            //s.insert(new Place(cityState, zipCode));
+            s.insert(new Place(cityState, zipCode), out);
             b.insert(new Place(cityState, zipCode));
             a.insert(new Place(cityState, zipCode));
         }
