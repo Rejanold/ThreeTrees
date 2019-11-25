@@ -41,30 +41,49 @@ public class Trees {
         }
     }
 
-    public static void passToPlace(Scanner data) throws FileNotFoundException {
+    public static void addToTrees(Scanner data) throws FileNotFoundException {
         FileOutputStream fout = new FileOutputStream("temporary.txt");            //temp delete later
         PrintStream out = new PrintStream(fout);                                        //temp delete later
-
+		
+		SplayTree<Place> s = new SplayTree<Place>();
+        BinarySearchTree<Place> b = new BinarySearchTree<Place>();
+        AVLTree<Place> a = new AVLTree<Place>();
+		
+		String lastName;
+		int lastCode;
+		
         String firstLine = data.nextLine();
-        if (firstLine != null) {
-            //do nothing with the first line
-        }
+		int zipCode = data.nextInt();
+        double xValue = data.nextInt(); //ignore
+        double yValue = data.nextInt(); //ignore
+        String cityState = data.nextLine();
+		Place newPlace = new Place(cityState, zipcode);
+		lastName = cityState;
+		
         while (data.hasNextLine()) {
             int zipCode = data.nextInt();
             double xValue = data.nextInt(); //ignore
             double yValue = data.nextInt(); //ignore
             String cityState = data.nextLine();
-            SplayTree<Place> s = new SplayTree<Place>();
-            BinarySearchTree<Place> b = new BinarySearchTree<Place>();
-            AVLTree<Place> a = new AVLTree<Place>();
-            Place test = new Place(cityState, zipCode);
-            if (test.compareTo(cityState, b.search(cityState,zipCode))== true) {
-                //add zip code to existing city
-            } else{
-                s.insert(new Place(cityState, zipCode), out);
-                b.insert(new Place(cityState, zipCode));
-                a.insert(new Place(cityState, zipCode));
-            }
+            if (cityState.equals(lastName)) {
+				newPlace.addZip(zipCode);               //add zip code to existing city
+				if(!data.hasNextLine()){                  // Last line of file check 
+					s.insert(newPlace, out);                 //delete the printstream
+					b.insert(newPlace);
+					a.insert(newPlace);
+				}
+			} else{
+                s.insert(newPlace, out);                 //delete the printstream
+                b.insert(newPlace);
+                a.insert(newPlace);
+				Place newPlace = new Place(cityState, zipcode);
+				if(!data.hasNextLine()){                  // Last line of file check 
+					s.insert(newPlace, out);                 //delete the printstream
+					b.insert(newPlace);
+					a.insert(newPlace);
+				}
+				lastName = cityState;
+			}
         }
     }
 
