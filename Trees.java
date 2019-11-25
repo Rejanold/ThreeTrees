@@ -23,7 +23,7 @@ public class Trees {
 
     public static void askUser(Scanner console) throws FileNotFoundException {
         boolean game = true;
-        while(game == true) {
+        while (game == true) {
             System.out.print("You want to search for the city: ");
             String response = console.nextLine();
             System.out.println("The number of comparisons needed to find the entry in BST: ");
@@ -32,24 +32,24 @@ public class Trees {
             System.out.println("The zip codes that belong to " + response + " are: ");
             System.out.print("Do you want me to search again? ");
             String response2 = console.nextLine();
-            if(response2.equalsIgnoreCase("yes")){
+            if (response2.equalsIgnoreCase("yes")) {
                 System.out.println();
                 game = true;
-            }else{
+            } else {
                 System.exit(0);
             }
         }
     }
 
-    public static void passToPlace(Scanner data) throws FileNotFoundException{
+    public static void passToPlace(Scanner data) throws FileNotFoundException {
         FileOutputStream fout = new FileOutputStream("temporary.txt");            //temp delete later
         PrintStream out = new PrintStream(fout);                                        //temp delete later
 
         String firstLine = data.nextLine();
-        if(firstLine != null){
+        if (firstLine != null) {
             //do nothing with the first line
         }
-        while (data.hasNextLine()){
+        while (data.hasNextLine()) {
             int zipCode = data.nextInt();
             double xValue = data.nextInt(); //ignore
             double yValue = data.nextInt(); //ignore
@@ -57,9 +57,15 @@ public class Trees {
             SplayTree<Place> s = new SplayTree<Place>();
             BinarySearchTree<Place> b = new BinarySearchTree<Place>();
             AVLTree<Place> a = new AVLTree<Place>();
-            s.insert(new Place(cityState, zipCode), out);
-            b.insert(new Place(cityState, zipCode));
-            a.insert(new Place(cityState, zipCode));
+            Place test = new Place(cityState, zipCode);
+            if (test.compareTo(cityState, b.search(cityState,zipCode))== true) {
+                //add zip code to existing city
+            } else{
+                s.insert(new Place(cityState, zipCode), out);
+                b.insert(new Place(cityState, zipCode));
+                a.insert(new Place(cityState, zipCode));
+            }
         }
     }
+
 }

@@ -20,19 +20,36 @@ public class Place implements Comparable<Place> {
         this.cityStateName = cityStateName;
     }
 
+    /**
+     * This method compares city and state names
+     * @param p is the object called
+     * @return returns the int associated with the compareTo
+     */
     public int compareTo(Place p){
         String pt = p.getTownAndState();
         return pt.compareTo(this.cityStateName);
     }
 
+    /**
+     * This method gets the town and state name
+     * @return returns the name
+     */
     public String getTownAndState(){
         return cityStateName;
     }
 
+    /**
+     * This method makes an array list for the zip codes
+     * @return returns the zip codes in an array list
+     */
     public ArrayList<Integer> getZipCodes(){
         return zipCodes;
     }
 
+    /**
+     * This method adds the zip codes to the array list
+     * @param zipCode the zip code called
+     */
     public void addZip(int zipCode){
         zipCodes.add(zipCode);
     }
