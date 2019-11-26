@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Place implements Comparable<Place> {
     private String cityStateName;
-    private ArrayList<Integer> zipCodes;
+    public ArrayList<Integer> zipCodes = new ArrayList<Integer>();
 
     /**
      * This is the constructor for the class
@@ -18,6 +18,8 @@ public class Place implements Comparable<Place> {
      */
     public Place(String cityStateName, int zipCode){
         this.cityStateName = cityStateName;
+        zipCodes.add(zipCode);
+
     }
 
     /**
@@ -27,6 +29,7 @@ public class Place implements Comparable<Place> {
      */
     public int compareTo(Place p){
         String pt = p.getTownAndState();
+        //System.out.println(pt + "      " + cityStateName);
         return pt.compareTo(this.cityStateName);
     }
 
@@ -51,16 +54,19 @@ public class Place implements Comparable<Place> {
      * @param zipCode the zip code called
      */
     public void addZip(int zipCode){
-        zipCodes.add(zipCode);
+        this.zipCodes.add(zipCode);
     }
 
     /**
      * This method returns the city/state name and zipC codes arrayList in string form
      * @return is the string returned
      */
+
     public String toString(){
         return "City and State: " + cityStateName + " with zip codes: " + zipCodes;
     }
+
+
 
     /**
      * This method compares one cities name to another cities name
