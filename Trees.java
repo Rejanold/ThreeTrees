@@ -17,57 +17,40 @@ public class Trees {
         Scanner console = new Scanner(System.in);
         File file = new File("ZipsSmall.txt");
         Scanner data = new Scanner(file);
-        askUser(console);
-
-    }
-
-    public static void askUser(Scanner console) throws FileNotFoundException {
-        boolean game = true;
-        while (game == true) {
-            System.out.print("You want to search for the city: ");
-            String response = console.nextLine();
-            System.out.println("The number of comparisons needed to find the entry in BST: ");
-            System.out.println("The number of comparisons needed to find the entry in AVL: ");
-            System.out.println("The number of comparisons needed to find the entry in Splay: ");
-            System.out.println("The zip codes that belong to " + response + " are: ");
-            System.out.print("Do you want me to search again? ");
-            String response2 = console.nextLine();
-            if (response2.equalsIgnoreCase("yes")) {
-                System.out.println();
-                game = true;
-            } else {
-                System.exit(0);
-            }
-        }
-    }
-
-    public static void askUser(Scanner console) throws FileNotFoundException {
-        boolean game = true;
-        while (game == true) {
-            System.out.print("You want to search for the city: ");
-            String response = console.nextLine();
-            System.out.println("The number of comparisons needed to find the entry in BST: ");
-            System.out.println("The number of comparisons needed to find the entry in AVL: ");
-            System.out.println("The number of comparisons needed to find the entry in Splay: ");
-            System.out.println("The zip codes that belong to " + response + " are: ");
-            System.out.print("Do you want me to search again? ");
-            String response2 = console.nextLine();
-            if (response2.equalsIgnoreCase("yes")) {
-                System.out.println();
-                game = true;
-            } else {
-                System.exit(0);
-            }
-        }
-    }
-
-    public static void addToTrees(Scanner data) throws FileNotFoundException {
-        FileOutputStream fout = new FileOutputStream("temporary.txt");            //temp delete later
-        PrintStream out = new PrintStream(fout);                                        //temp delete later
 
         SplayTree<Place> s = new SplayTree<Place>();
         BinarySearchTree<Place> b = new BinarySearchTree<Place>();
         AVLTree<Place> a = new AVLTree<Place>();
+
+        addToTrees(data, s, b, a);
+        askUser(console, s, b, a);
+
+    }
+
+    public static void askUser(Scanner console,SplayTree<Place> s, BinarySearchTree<Place> b, AVLTree<Place> a) throws FileNotFoundException {
+        boolean game = true;
+        while (game == true) {
+            System.out.print("You want to search for the city: ");
+            String response = console.nextLine();
+            System.out.println("The number of comparisons needed to find the entry in BST: ");
+            System.out.println("The number of comparisons needed to find the entry in AVL: ");
+            System.out.println("The number of comparisons needed to find the entry in Splay: ");
+            System.out.println("The zip codes that belong to " + response + " are: ");
+            System.out.print("Do you want me to search again? ");
+            String response2 = console.nextLine();
+            if (response2.equalsIgnoreCase("yes")) {
+                System.out.println();
+                game = true;
+            } else {
+                System.exit(0);
+            }
+        }
+    }
+
+    public static void addToTrees(Scanner data,SplayTree<Place> s, BinarySearchTree<Place> b, AVLTree<Place> a) {
+        //SplayTree<Place> s = new SplayTree<Place>();
+        //BinarySearchTree<Place> b = new BinarySearchTree<Place>();
+        //AVLTree<Place> a = new AVLTree<Place>();
 
         String lastName;
         int lastCode;
@@ -77,28 +60,28 @@ public class Trees {
         double xValue = data.nextInt(); //ignore
         double yValue = data.nextInt(); //ignore
         String cityState = data.nextLine();
-        Place newPlace = new Place(cityState, zipCode);
+        Place newPlace1 = new Place(cityState, zipCode);
         lastName = cityState;
 
         while (data.hasNextLine()) {
-            int zipCode = data.nextInt();
-            double xValue = data.nextInt(); //ignore
-            double yValue = data.nextInt(); //ignore
-            String cityState = data.nextLine();
-            if (cityState.equals(lastName)) {
-                newPlace.addZip(zipCode);               //add zip code to existing city
+            int zipCode1 = data.nextInt();
+            double xValue1 = data.nextInt(); //ignore
+            double yValue1 = data.nextInt(); //ignore
+            String cityState1 = data.nextLine();
+            if (cityState1.equals(lastName)) {
+                newPlace1.addZip(zipCode1);               //add zip code to existing city
                 if (!data.hasNextLine()) {                  // Last line of file check
-                    s.insert(newPlace, out);                 //delete the printstream
-                    b.insert(newPlace);
-                    a.insert(newPlace);
+                    s.insert(newPlace1);
+                    b.insert(newPlace1);
+                    a.insert(newPlace1);
                 }
             } else {
-                s.insert(newPlace, out);                 //delete the printstream
-                b.insert(newPlace);
-                a.insert(newPlace);
-                Place newPlace = new Place(cityState, zipcode);
+                s.insert(newPlace1);
+                b.insert(newPlace1);
+                a.insert(newPlace1);
+                Place newPlace = new Place(cityState, zipCode);
                 if (!data.hasNextLine()) {                  // Last line of file check
-                    s.insert(newPlace, out);                 //delete the printstream
+                    s.insert(newPlace);
                     b.insert(newPlace);
                     a.insert(newPlace);
                 }
@@ -106,5 +89,4 @@ public class Trees {
             }
         }
     }
-
 }
