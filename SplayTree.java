@@ -9,7 +9,9 @@ import java.io.*;
 public class SplayTree<E extends Comparable<E>> {
     private SplayBSTNode<E> root;
     private int size;
-    public int compareNum=0;
+    private int compareNum=0;
+
+
     //Constructor
     public SplayTree() {
         root = null;
@@ -52,9 +54,10 @@ public class SplayTree<E extends Comparable<E>> {
      */
     public SplayBSTNode<E> search(E it) {
         SplayBSTNode<E> node = root;
+        compareNum = 0;
         while (node != null) {
             int compareResult = it.compareTo(node.getElement());
-            compareNum++;
+            //compareNum++;
             if (compareResult < 0) {
                 node = node.getLeft();
             } else if (compareResult > 0) {
@@ -63,6 +66,8 @@ public class SplayTree<E extends Comparable<E>> {
                 //this is it!
                 return node;
             }
+            //System.out.println(compareNum);
+            compareNum++;
         }
         System.out.println(it + " is not in the tree");
         return null;     //not there homie SORRY
@@ -216,7 +221,6 @@ public class SplayTree<E extends Comparable<E>> {
         while (x.getParent() != null) {
             SplayBSTNode<E> Parent = x.getParent();
             SplayBSTNode<E> GrandParent = Parent.getParent();
-            //System.out.println("HERE");
             //zig
             if (GrandParent == null) {
 
