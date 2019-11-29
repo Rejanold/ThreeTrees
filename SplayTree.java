@@ -10,17 +10,19 @@ public class SplayTree<E extends Comparable<E>> {
     private SplayBSTNode<E> root;
     private int size;
     private int compareNum=0;
-
-
     //Constructor
     public SplayTree() {
         root = null;
         size = 0;
     }
     public int getCompareNum(){
-        return compareNum;
+        int hold = this.compareNum;
+        this.compareNum = 0;
+        return hold;
     }
-
+    public void setCompareNum(int n){
+        this.compareNum = n;
+    }
     //Another Constructor
     public SplayTree(SplayBSTNode<E> node) {
         root = node;
@@ -53,24 +55,24 @@ public class SplayTree<E extends Comparable<E>> {
      * @return returns the searched for element
      */
     public SplayBSTNode<E> search(E it) {
+        this.compareNum = 0;
         SplayBSTNode<E> node = root;
-        compareNum = 0;
         while (node != null) {
             int compareResult = it.compareTo(node.getElement());
-            //compareNum++;
+            //System.out.println(this.compareNum);
+            this.compareNum++;
             if (compareResult < 0) {
                 node = node.getLeft();
             } else if (compareResult > 0) {
                 node = node.getRight();
             } else {
                 //this is it!
+                splay(node);
                 return node;
             }
-            //System.out.println(compareNum);
-            compareNum++;
         }
         System.out.println(it + " is not in the tree");
-        return null;
+        return null;     //not there homie SORRY
     }
 
 
@@ -221,6 +223,7 @@ public class SplayTree<E extends Comparable<E>> {
         while (x.getParent() != null) {
             SplayBSTNode<E> Parent = x.getParent();
             SplayBSTNode<E> GrandParent = Parent.getParent();
+            //System.out.println("HERE");
             //zig
             if (GrandParent == null) {
 

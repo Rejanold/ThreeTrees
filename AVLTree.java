@@ -40,8 +40,8 @@ public class AVLTree<E extends Comparable<E>> {
      * @return the node that contains it
      */
     public AVLNode<E> search(E it) {
-        AVLNode<E> node = root;
         compareNum = 0;
+        AVLNode<E> node = root;
         while (node != null) {
             int res = it.compareTo(node.getElement());
             compareNum++;
