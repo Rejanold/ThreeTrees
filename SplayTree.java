@@ -70,7 +70,7 @@ public class SplayTree<E extends Comparable<E>> {
             compareNum++;
         }
         System.out.println(it + " is not in the tree");
-        return null;     //not there homie SORRY
+        return null;
     }
 
 

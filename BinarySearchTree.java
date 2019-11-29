@@ -54,10 +54,11 @@ public class BinarySearchTree<E extends Comparable<E>> {
      */
     public BSTNode<E> search(E it) {
         BSTNode<E> node = root;
+        compareNum = 0;
         while (node != null) {
            // System.out.println(node.getElement() + " HERE");
             int compareResult = it.compareTo(node.getElement());
-            compareNum++;
+            //compareNum++;
             if (compareResult < 0) {
                 node = node.getLeft();
             } else if (compareResult > 0) {
@@ -67,6 +68,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
                 return node;
             }
             //searchCounter++;
+            compareNum++;
         }
         System.out.println(it + " is not in the tree lol");
         return null;     //not there homie SORRY

@@ -142,9 +142,8 @@ public class Trees {
         int count = searchPlace.size() - 1;
         for (int i = 0; i < count; i++) {
             Place searchFor = new Place(searchPlace.get(i), 0000);
-            System.out.println(searchFor);
             SplayBSTNode<Place> found = s.search(searchFor);
-            BSTNode<Place> found1 = b.search(searchFor);
+            BSTNode<Place> found1 = b.search(searchFor); //Blake I think the problem is here lines 144-150
             AVLNode<Place> found2 = a.search(searchFor);
             int splay = s.getCompareNum();
             int bst = b.getCompareNum();
@@ -153,34 +152,64 @@ public class Trees {
             bstHold.add(bst);
             avlHold.add(avl);
         }
-
-
+        ArrayList<Double> stdDev = new ArrayList<>();
+        double sum2 = 0;
         double sumSplay = 0;
         double sumBST = 0;
         double sumAVL = 0;
-        double sum2 = 0;
-        double sdSplay = 0;
+        double splaySD = 0;
+        double bstSD = 0;
+        double avlSD = 0;
+
+
+        //Finding averages for each search tree
         for (int i = 0; i < sHold.size() - 1; i++) {
-            sumSplay += i;
+            double indexNum = sHold.get(i);
+            sumSplay += indexNum;
+            System.out.println(sumSplay);
         }
         for (int i = 0; i < bstHold.size() - 1; i++) {
-            sumBST += i;
+            int indexNum = bstHold.get(i);
+            sumBST += indexNum;
         }
         for (int i = 0; i < avlHold.size() - 1; i++) {
-            sumAVL += i;
+            int indexNum = avlHold.get(i);
+            sumAVL += indexNum;
         }
-        double avgSplay = sumSplay / sHold.size();
+        double avgSplay = sumSplay / sHold.size(); //Step 1 get mean
+        for(int i = 0; i < sHold.size()-1 ; i++){
+            stdDev.add(Math.abs(Math.pow(sHold.get(i) - avgSplay, 2))); //Step 2 Find the Deviation |x-u|^2 and add them to a new array
+         //   System.out.println(stdDev.get(i));
+        }
+        for(int j = 0; j < stdDev.size()-1; j++){
+            double indexNum = stdDev.get(j);
+            splaySD += indexNum; //Step 3 Summing the new Values
+            //System.out.println(splaySD);
+            splaySD = splaySD / stdDev.size(); //Step 4 dive the new sum by the size(number of data points)
+            splaySD = Math.sqrt(splaySD); //Step 5 Take the square Root
+
+        }
+        //double splaySD = Math.sqrt()
+
         double avgBST = sumBST / bstHold.size();
         double avgAVL = sumAVL / avlHold.size();
-        /*for (int i = 0; i < sHold.size(); i++) {
-            double fvalue = (Math.pow((sHold.get(i) - avgSplay), 2));
-            //x1_average[i] = fvalue;
-            System.out.println("test: " + fvalue);
-        }*/
-        sdSplay = Math.sqrt(sum2 / avlHold.size());
-        System.out.println("The average # of searches for the Splay tree was: " + avgSplay + " and the Standard Deviation is :");
-        System.out.println("The average # of searches for the BST tree was: " + avgBST);
-        System.out.println("The average # of searches for the AVL tree was: " + avgAVL);
+      //  splaySD1 = Math.sqrt(sum2 / sHold.size());
+        bstSD += Math.pow(bstHold.size() - avgBST, 2);
+        bstSD = Math.sqrt(bstSD / bstHold.size());
+        avlSD += Math.pow(avlHold.size() - avgAVL, 2);
+        avlSD = Math.sqrt(avlSD / avlHold.size());
+
+
+
+
+
+
+        System.out.printf("The average # of searches for the Splay tree was: %.3f", avgSplay  );
+        System.out.printf( " and the Standard Deviation is : %.3f", splaySD);
+        System.out.printf("\nThe average # of searches for the BST tree was: %.3f", avgBST);
+        System.out.printf(" and the standard deviation is : %.3f", bstSD);
+        System.out.printf("\nThe average # of searches for the AVL tree was: %.3f", avgAVL);
+        System.out.printf(" and the standard deviation is: %.3f", avlSD);
        /* for(int i = 1; i < 4; i++){
             double sum = 0;
             double sum2= 0;
