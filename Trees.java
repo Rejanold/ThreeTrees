@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,8 +22,8 @@ public class Trees {
         BinarySearchTree<Place> b = new BinarySearchTree<Place>();
         AVLTree<Place> a = new AVLTree<Place>();
         addToTrees(data, s, b, a);
-        askUser(console, s, b, a);
-        //getResults(console, s, b, a);
+        //askUser(console, s, b, a);
+        getResults(console, s, b, a);
     }
 
     /**
@@ -37,19 +38,19 @@ public class Trees {
         while (game == true) {
             System.out.print("You want to search for the city: ");
             String response = console.nextLine();
-            Place searchFor = new Place(response, 0000);
-            SplayNode<Place> found = s.search(searchFor);
+            Place searchFor = new Place(response.trim(), 0000);
+            SplayBSTNode<Place> found = s.search(searchFor);
             BSTNode<Place> found1 = b.search(searchFor);
             AVLNode<Place> found2 = a.search(searchFor);
             if (found1 == null) {
                 System.out.println("There is not a city by this name.");
             }
             System.out.print("The number of comparisons needed to find the entry in BST: ");
-            System.out.println(b.getSearchCounter());
+            System.out.println(b.getCompareNum());
             System.out.print("The number of comparisons needed to find the entry in AVL: ");
-            System.out.println(a.getSearchCounter());
+            System.out.println(a.getCompareNum());
             System.out.print("The number of comparisons needed to find the entry in Splay: ");
-            System.out.println(s.getSearchCounter());
+            System.out.println(s.getCompareNum());
             try{
                 ArrayList<Integer> zipps = found.getElement().getZipCodes();
                 if(zipps != null){
@@ -81,7 +82,7 @@ public class Trees {
             double x = data.nextDouble();
             double y = data.nextDouble();
             String place = data.nextLine();
-            places.add(place);
+            places.add(place.trim());
         }
         return places;
     }
@@ -134,24 +135,32 @@ public class Trees {
      */
     public static void getResults(Scanner data, SplayTree<Place> s, BinarySearchTree<Place> b, AVLTree<Place> a)throws FileNotFoundException {
         ArrayList<String> searchPlace = new ArrayList<>(searchTest());
+        PrintStream outputCompares = new PrintStream(new File("CompareNumbers.txt"));
         ArrayList<Integer> sHold = new ArrayList<>();
         ArrayList<Integer> bstHold = new ArrayList<>();
         ArrayList<Integer> avlHold = new ArrayList<>();
         int count = searchPlace.size() - 1;
         for (int i = 0; i < count; i++) {
             //System.out.println("Here");
-            Place searchFor = new Place(searchPlace.get(i), 0000);
-            SplayNode<Place> found = s.search(searchFor);
+            Place searchFor = new Place(searchPlace.get(i).trim(), 0000);
+            outputCompares.print(searchPlace.get(i) + "  ");
+            SplayBSTNode<Place> found = s.search(searchFor);
             BSTNode<Place> found1 = b.search(searchFor); //Blake I think the problem is here lines 144-150
             AVLNode<Place> found2 = a.search(searchFor);
-            int splay = s.getSearchCounter();
-            int bst = b.getSearchCounter();
-            int avl = a.getSearchCounter();
+            int splay = s.getCompareNum();
+            s.setCompareNum(0);
+            outputCompares.print(splay + "  ");
+            int bst = b.getCompareNum();
+            outputCompares.print(bst + "  ");
+            int avl = a.getCompareNum();
+            outputCompares.println(avl);
             sHold.add(splay);
             bstHold.add(bst);
             avlHold.add(avl);
         }
         ArrayList<Double> stdDev = new ArrayList<>();
+        ArrayList<Double> BstdDev = new ArrayList<>();
+        ArrayList<Double> AstdDev = new ArrayList<>();
         double sum2 = 0;
         double sumSplay = 0;
         double sumBST = 0;
@@ -159,19 +168,23 @@ public class Trees {
         double splaySD = 0;
         double bstSD = 0;
         double avlSD = 0;
+        //splay tree sum
         for (int i = 0; i < sHold.size() - 1; i++) {
             double indexNum = sHold.get(i);
             sumSplay += indexNum;
             //System.out.println(sumSplay);
         }
+        //binary tree sum
         for (int i = 0; i < bstHold.size() - 1; i++) {
             int indexNum = bstHold.get(i);
             sumBST += indexNum;
         }
+        //avl tree sum
         for (int i = 0; i < avlHold.size() - 1; i++) {
             int indexNum = avlHold.get(i);
             sumAVL += indexNum;
         }
+        //calculate splay stdev
         double avgSplay = sumSplay / sHold.size(); //Step 1 get mean
         for(int i = 0; i < sHold.size()-1 ; i++){
             stdDev.add(Math.abs(Math.pow(sHold.get(i) - avgSplay, 2))); //Step 2 Find the Deviation |x-u|^2 and add them to a new array
@@ -179,16 +192,34 @@ public class Trees {
         for(int j = 0; j < stdDev.size()-1; j++){
             double indexNum = stdDev.get(j);
             splaySD += indexNum; //Step 3 Summing the new Values
-            splaySD = splaySD / stdDev.size(); //Step 4 dive the new sum by the size(number of data points)
-            splaySD = Math.sqrt(splaySD); //Step 5 Take the square Root
 
         }
+        splaySD = splaySD / stdDev.size(); //Step 4 dive the new sum by the size(number of data points)
+        splaySD = Math.sqrt(splaySD);//Step 5 Take the square Root
+        //calculate bst stdev
         double avgBST = sumBST / bstHold.size();
+        for(int i = 0; i < bstHold.size() - 1; i++){
+            BstdDev.add(Math.abs(Math.pow(bstHold.get(i) - avgBST, 2)));
+        }
+        for(int j = 0; j < BstdDev.size()-1; j++){
+            double indexNum = BstdDev.get(j);
+            bstSD += indexNum; //Step 3 Summing the new Values
+
+        }
+        bstSD = bstSD / BstdDev.size();
+        bstSD = Math.sqrt(bstSD);
+
+        //calculate avl stdev
         double avgAVL = sumAVL / avlHold.size();
-        bstSD += Math.pow(bstHold.size() - avgBST, 2);
-        bstSD = Math.sqrt(bstSD / bstHold.size());
-        avlSD += Math.pow(avlHold.size() - avgAVL, 2);
-        avlSD = Math.sqrt(avlSD / avlHold.size());
+        for(int i = 0; i < avlHold.size() -1; i++){
+            AstdDev.add(Math.abs(Math.pow(bstHold.get(i) - avgAVL,2)));
+        }
+        for(int j = 0; j < AstdDev.size() -1; j++){
+            double indexNum = AstdDev.get(j);
+            avlSD += indexNum;
+        }
+        avlSD = avlSD / AstdDev.size();
+        avlSD = Math.sqrt(avlSD);
         System.out.printf("The average # of searches for the Splay tree was: %.3f", avgSplay  );
         System.out.printf( " and the Standard Deviation is : %.3f", splaySD);
         System.out.printf("\nThe average # of searches for the BST tree was: %.3f", avgBST);
