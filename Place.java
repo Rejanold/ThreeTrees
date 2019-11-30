@@ -19,7 +19,6 @@ public class Place implements Comparable<Place> {
     public Place(String cityStateName, int zipCode){
         this.cityStateName = cityStateName;
         zipCodes.add(zipCode);
-
     }
 
     /**
@@ -29,7 +28,6 @@ public class Place implements Comparable<Place> {
      */
     public int compareTo(Place p){
         String pt = p.getTownAndState();
-        //System.out.println(pt + "      " + cityStateName);
         return pt.compareTo(this.cityStateName);
     }
 
@@ -61,26 +59,7 @@ public class Place implements Comparable<Place> {
      * This method returns the city/state name and zipC codes arrayList in string form
      * @return is the string returned
      */
-
     public String toString(){
         return "City and State: " + cityStateName + " with zip codes: " + zipCodes;
-    }
-
-
-
-    /**
-     * This method compares one cities name to another cities name
-     * @param cityStateName1 the first city/state name called from driver
-     * @param cityStateName2 the second city/stateN name called from driver
-     * @return returns true/false depending on whether or not the cities names
-     * are equal to each other or not
-     */
-    public boolean compareTo(String cityStateName1, String cityStateName2){
-        boolean result;
-        if(cityStateName1.equals(cityStateName2)){
-            result = true;
-        }
-        result = false;
-        return result;
     }
 }

@@ -22,8 +22,8 @@ public class Trees {
         BinarySearchTree<Place> b = new BinarySearchTree<Place>();
         AVLTree<Place> a = new AVLTree<Place>();
         addToTrees(data, s, b, a);
-        //askUser(console, s, b, a);
-        getResults(console, s, b, a);
+        askUser(console, s, b, a);
+        //getResults(console, s, b, a);
     }
 
     /**
@@ -39,18 +39,18 @@ public class Trees {
             System.out.print("You want to search for the city: ");
             String response = console.nextLine();
             Place searchFor = new Place(response.trim(), 0000);
-            SplayBSTNode<Place> found = s.search(searchFor);
+            SplayNode<Place> found = s.search(searchFor);
             BSTNode<Place> found1 = b.search(searchFor);
             AVLNode<Place> found2 = a.search(searchFor);
             if (found1 == null) {
                 System.out.println("There is not a city by this name.");
             }
             System.out.print("The number of comparisons needed to find the entry in BST: ");
-            System.out.println(b.getCompareNum());
+            System.out.println(b.getSearchCounter());
             System.out.print("The number of comparisons needed to find the entry in AVL: ");
-            System.out.println(a.getCompareNum());
+            System.out.println(a.getSearchCounter());
             System.out.print("The number of comparisons needed to find the entry in Splay: ");
-            System.out.println(s.getCompareNum());
+            System.out.println(s.getSearchCounter());
             try{
                 ArrayList<Integer> zipps = found.getElement().getZipCodes();
                 if(zipps != null){
@@ -72,6 +72,11 @@ public class Trees {
         }
     }
 
+    /**
+     * This method puts search values into an arrayList for the getResults method
+     * @return returns an arrayList of results
+     * @throws FileNotFoundException keeps the file running
+     */
     public static ArrayList<String> searchTest() throws FileNotFoundException {
         ArrayList<String> places = new ArrayList<String>();
         File file = new File("zips.txt");
@@ -113,7 +118,6 @@ public class Trees {
             } else {
                 if (cityState1.equals(prevName)) {
                     holdPlace.addZip(zipCode1);//add zip code to existing city
-
                 } else {
                     Place newPlace2 = new Place(cityState1, zipCode1);
                     s.insert(newPlace2);
@@ -136,6 +140,7 @@ public class Trees {
     public static void getResults(Scanner data, SplayTree<Place> s, BinarySearchTree<Place> b, AVLTree<Place> a)throws FileNotFoundException {
         ArrayList<String> searchPlace = new ArrayList<>(searchTest());
         PrintStream outputCompares = new PrintStream(new File("CompareNumbers.txt"));
+        PrintStream outputComparesExcel = new PrintStream(new File("CompareNumbers.csv"));
         ArrayList<Integer> sHold = new ArrayList<>();
         ArrayList<Integer> bstHold = new ArrayList<>();
         ArrayList<Integer> avlHold = new ArrayList<>();
@@ -144,16 +149,20 @@ public class Trees {
             //System.out.println("Here");
             Place searchFor = new Place(searchPlace.get(i).trim(), 0000);
             outputCompares.print(searchPlace.get(i) + "  ");
-            SplayBSTNode<Place> found = s.search(searchFor);
+            outputComparesExcel.print(searchPlace.get(i) + "  ");
+            SplayNode<Place> found = s.search(searchFor);
             BSTNode<Place> found1 = b.search(searchFor); //Blake I think the problem is here lines 144-150
             AVLNode<Place> found2 = a.search(searchFor);
-            int splay = s.getCompareNum();
+            int splay = s.getSearchCounter();
             s.setCompareNum(0);
             outputCompares.print(splay + "  ");
-            int bst = b.getCompareNum();
+            outputComparesExcel.print(splay + "  ");
+            int bst = b.getSearchCounter();
             outputCompares.print(bst + "  ");
-            int avl = a.getCompareNum();
+            outputComparesExcel.print(bst + "  ");
+            int avl = a.getSearchCounter();
             outputCompares.println(avl);
+            outputComparesExcel.println(avl);
             sHold.add(splay);
             bstHold.add(bst);
             avlHold.add(avl);
@@ -192,11 +201,10 @@ public class Trees {
         for(int j = 0; j < stdDev.size()-1; j++){
             double indexNum = stdDev.get(j);
             splaySD += indexNum; //Step 3 Summing the new Values
-
         }
         splaySD = splaySD / stdDev.size(); //Step 4 dive the new sum by the size(number of data points)
         splaySD = Math.sqrt(splaySD);//Step 5 Take the square Root
-        //calculate bst stdev
+        //calculate bst st dev
         double avgBST = sumBST / bstHold.size();
         for(int i = 0; i < bstHold.size() - 1; i++){
             BstdDev.add(Math.abs(Math.pow(bstHold.get(i) - avgBST, 2)));
@@ -204,11 +212,9 @@ public class Trees {
         for(int j = 0; j < BstdDev.size()-1; j++){
             double indexNum = BstdDev.get(j);
             bstSD += indexNum; //Step 3 Summing the new Values
-
         }
         bstSD = bstSD / BstdDev.size();
         bstSD = Math.sqrt(bstSD);
-
         //calculate avl stdev
         double avgAVL = sumAVL / avlHold.size();
         for(int i = 0; i < avlHold.size() -1; i++){
